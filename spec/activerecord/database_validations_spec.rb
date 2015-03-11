@@ -15,7 +15,7 @@ I18n.backend.store_translations :en, inbox: {
 class Dummy < ActiveRecord::Base
 end
 
-describe Activerecord::HandleStatementInvalid do
+describe Activerecord::DatabaseValidations do
   let(:older_dummy) { Dummy.new(not_null_integer: 0, not_null_string: "") }
   subject(:dummy) { Dummy.new(not_null_integer: 0, not_null_string: "") }
 
