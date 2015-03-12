@@ -5,8 +5,10 @@ module ActiveRecord::DatabaseValidations::Validations
     validates_database_foreign_key
   end
 
+  NOT_NULL_IGNORED = ['created_at', 'updated_at']
   def validates_database_not_null(options = {})
     columns.reject(&:null).each do |column|
+      next if NOT_NULL_IGNORED.include?(column.name)
       validation = proc do
         if self[column.name].nil?
           errors.add(column.name, options[:message] || :blank)

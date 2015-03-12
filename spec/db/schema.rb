@@ -13,6 +13,9 @@ ActiveRecord::Schema.define do
     t.string  "unique_multiple_string2",  limit: 255
 
     t.integer "foreign_key",              limit: 4
+
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   add_index "dummies", ["unique_single_integer"], name: "index_dummies_on_unique_single_integer", unique: true, using: :btree
