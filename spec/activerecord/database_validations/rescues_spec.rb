@@ -3,12 +3,12 @@ require 'spec_helper'
 class Dummy < ActiveRecord::Base
 end
 
-describe ActiveRecord::DatabaseValidations::HandleStatementInvalid do
+describe ActiveRecord::DatabaseValidations::Rescues do
   let(:older_dummy) { Dummy.new(not_null_integer: 0, not_null_string: "") }
   let(:dummy) { Dummy.new(not_null_integer: 0, not_null_string: "") }
 
-  shared_examples_for :handle_statement_invalid do
-    context "not null" do
+  shared_examples_for :rescues do
+    describe "#rescue_database_not_null" do
       context "primary key" do
         let!(:result) { dummy.tap(&:save!).update_attributes(id: nil) } # can't set new primary key to nil
         specify { expect(result).to be false }
@@ -28,7 +28,7 @@ describe ActiveRecord::DatabaseValidations::HandleStatementInvalid do
       end
     end
 
-    context "unique" do
+    describe "#rescue_database_unique" do
       context "primary key" do
         let!(:result) { dummy.update_attributes(id: older_dummy.tap(&:save!).id) }
         specify { expect(result).to be false }
@@ -68,7 +68,7 @@ describe ActiveRecord::DatabaseValidations::HandleStatementInvalid do
       end
     end
 
-    context "foreign key" do
+    describe "#rescue_database_foreign_key" do
       let!(:result) { dummy.update_attributes(foreign_key: -1) }
       specify { expect(result).to be false }
       specify { expect(dummy.errors.messages).to eq(foreign_key: [I18n.t("errors.messages.inclusion")]) }
@@ -77,15 +77,16 @@ describe ActiveRecord::DatabaseValidations::HandleStatementInvalid do
 
   DATABASE_ADAPTERS.each do |database_adapter_config|
     context database_adapter_config[:adapter] do
-      before { ActiveRecord::Base.establish_connection(database_adapter_config) }
+      # using :all to make DatabaseCleaner come after us
+      before(:all) { ActiveRecord::Base.establish_connection(database_adapter_config) }
 
       context "new record" do
-        it_behaves_like :handle_statement_invalid
+        it_behaves_like :rescues
       end
 
       context "existing record" do
         before { dummy.save! }
-        it_behaves_like :handle_statement_invalid
+        it_behaves_like :rescues
       end
     end
   end

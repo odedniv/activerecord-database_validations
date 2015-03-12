@@ -23,19 +23,19 @@ module ActiveRecord::DatabaseValidations::Validations
 
   def validates_database_unique(options = {})
     validates_uniqueness_of(primary_key, **options, allow_nil: true) if primary_key
-    connection.indexes(table_name).select(&:unique).each do |index|
+    indexes.select(&:unique).each do |index|
       validates_uniqueness_of(index.columns[0], **options, scope: index.columns[1..-1], allow_nil: true)
     end
   end
 
   def validates_database_foreign_key(options = {})
-    connection.foreign_keys(table_name).each do |foreign_key|
+    foreign_keys.each do |foreign_key|
       model = Class.new(ActiveRecord::Base) do
         self.table_name = foreign_key.to_table
       end
       validate do
-        if not self[foreign_key.options[:column]].nil? and not model.where(foreign_key.options[:primary_key] => self[foreign_key.options[:column]]).exists?
-          errors.add(foreign_key.options[:column], options[:message] || :inclusion)
+        if not self[foreign_key.column].nil? and not model.where(foreign_key.primary_key => self[foreign_key.column]).exists?
+          errors.add(foreign_key.column, options[:message] || :inclusion)
         end
       end
     end

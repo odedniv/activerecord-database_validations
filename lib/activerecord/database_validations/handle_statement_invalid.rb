@@ -1,2 +1,0 @@
-module ActiveRecord::DatabaseValidations::HandleStatementInvalid
-end
