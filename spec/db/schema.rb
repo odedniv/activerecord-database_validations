@@ -18,7 +18,7 @@ ActiveRecord::Schema.define do
   add_index "dummies", ["unique_single_integer"], name: "index_dummies_on_unique_single_integer", unique: true, using: :btree
   add_index "dummies", ["unique_single_string"], name: "index_dummies_on_unique_single_string", unique: true, using: :btree
   add_index "dummies", ["unique_multiple_integer1", "unique_multiple_integer2"], name: "index_dummies_on_unique_multiple_integer", unique: true, using: :btree
-  add_index "dummies", ["unique_multiple_string2"], name: "index_dummies_on_unique_multiple_string", unique: true, using: :btree
+  add_index "dummies", ["unique_multiple_string1", "unique_multiple_string2"], name: "index_dummies_on_unique_multiple_string", unique: true, using: :btree
 
   add_foreign_key "dummies", "dummies", column: "foreign_key"
 end
