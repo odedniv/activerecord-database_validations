@@ -25,7 +25,7 @@ module ActiveRecord::DatabaseValidations::Rescues
   end
 
   UNIQUE_PATTERNS_BY_COLUMN = [
-    /^PG::UniqueViolation: ERROR:  duplicate key value violates unique constraint ".+?"\nDETAIL:  Key \((.+?)(?:, .+?)?\)=\(.+?\) already exists\./,
+    /^PG::UniqueViolation: ERROR:  duplicate key value violates unique constraint ".+?"\nDETAIL:  Key \((?:.+?, )*(.+?)\)=\(.+?\) already exists\./,
   ]
   UNIQUE_PATTERNS_BY_INDEX = [
     /^Mysql2::Error: Duplicate entry '.+?' for key '(.+?)':/,
@@ -46,7 +46,7 @@ module ActiveRecord::DatabaseValidations::Rescues
                       else
                         index = self.class.indexes.find { |i| i.name == $1 }
                         raise if index.nil?
-                        index.columns[0]
+                        index.columns[-1]
                       end
                     else
                       raise

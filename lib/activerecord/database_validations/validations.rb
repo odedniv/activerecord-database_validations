@@ -24,7 +24,7 @@ module ActiveRecord::DatabaseValidations::Validations
   def validates_database_unique(options = {})
     validates_uniqueness_of(primary_key, **options, allow_nil: true) if primary_key
     indexes.select(&:unique).each do |index|
-      validates_uniqueness_of(index.columns[0], **options, scope: index.columns[1..-1], allow_nil: true)
+      validates_uniqueness_of(index.columns[-1], **options, scope: index.columns[0...-1], if: -> { index.columns.none? { |c| self[c].nil? } })
     end
   end
 

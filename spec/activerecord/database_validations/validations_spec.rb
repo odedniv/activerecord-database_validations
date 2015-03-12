@@ -66,7 +66,7 @@ describe ActiveRecord::DatabaseValidations::Validations do
           before { dummy.assign_attributes(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be false }
-          specify { expect(dummy.errors.messages).to eq(unique_multiple_integer1: [I18n.t("errors.messages.taken")]) }
+          specify { expect(dummy.errors.messages).to eq(unique_multiple_integer2: [I18n.t("errors.messages.taken")]) }
         end
 
         context "string" do
@@ -74,7 +74,21 @@ describe ActiveRecord::DatabaseValidations::Validations do
           before { dummy.assign_attributes(unique_multiple_string1: 1, unique_multiple_string2: 2) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be false }
-          specify { expect(dummy.errors.messages).to eq(unique_multiple_string1: [I18n.t("errors.messages.taken")]) }
+          specify { expect(dummy.errors.messages).to eq(unique_multiple_string2: [I18n.t("errors.messages.taken")]) }
+        end
+
+        context "primary nil" do
+          before { older_dummy.update_attributes!(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
+          before { dummy.assign_attributes(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
+          let!(:result) { dummy.valid? }
+          specify { expect(result).to be true }
+        end
+
+        context "secondary nil" do
+          before { older_dummy.update_attributes!(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
+          before { dummy.assign_attributes(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
+          let!(:result) { dummy.valid? }
+          specify { expect(result).to be true }
         end
       end
     end
