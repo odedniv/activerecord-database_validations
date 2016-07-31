@@ -129,6 +129,24 @@ show the error on the specific field.
 
 ## Development
 
+To run the tests you must have a user and a database set up in the supported databases.
+
+As MySQL root:
+
+```sql
+CREATE USER 'gemtester'@'localhost';
+CREATE DATABASE activerecord_database_validations_test;
+GRANT ALL ON `activerecord_database_validations_test`.* TO 'gemtester'@'localhost';
+```
+
+As Postgresql root:
+
+```sql
+CREATE USER gemtester;
+CREATE DATABASE activerecord_database_validations_test;
+GRANT ALL PRIVILEGES ON DATABASE activerecord_database_validations_test TO gemtester;
+```
+
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
 
 ## Contributing

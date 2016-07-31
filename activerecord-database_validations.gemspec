@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Handle database validations}
   spec.description   = %q{Use database validations and convert ActiveRecord::StatementInvalid into ActiveRecord::RecordInvalid}
   spec.homepage      = "https://github.com/odedniv/activerecord-database_validations"
-  spec.license       = "UNLICENSE"
+  spec.license       = "Unlicense"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"

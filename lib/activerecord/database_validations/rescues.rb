@@ -56,9 +56,8 @@ module ActiveRecord::DatabaseValidations::Rescues
     end
   end
 
-
   FOREIGN_KEY_PATTERNS_BY_COLUMN = [
-    /^Mysql2::Error: Cannot add or update a child row: a foreign key constraint fails \(`.+?`\.`.+?`, CONSTRAINT `.+?` FOREIGN KEY \(`(.+?)`\) REFERENCES `.+?` \(`.+?`\)\):/,
+    /^Mysql2::Error: Cannot add or update a child row: a foreign key constraint fails \(`.+?`\.`.+?`, CONSTRAINT `.+?` FOREIGN KEY \(`(.+?)`\) REFERENCES `.+?` \(`.+?`\)(?: ON [A-Z ]+)?\):/,
     /^PG::ForeignKeyViolation: ERROR:  insert or update on table ".+?" violates foreign key constraint ".+?"\nDETAIL:  Key \((.+?)\)=\(.+?\) is not present in table ".+?"\.\n:/,
   ]
   FOREIGN_KEY_PATTERNS_BY_FOREIGN_KEY = [

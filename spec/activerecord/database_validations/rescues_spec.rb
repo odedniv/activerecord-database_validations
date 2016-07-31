@@ -83,9 +83,17 @@ describe ActiveRecord::DatabaseValidations::Rescues do
     end
 
     describe "#rescue_database_foreign_key" do
-      let!(:result) { dummy.update_attributes(foreign_key: -1) }
-      specify { expect(result).to be false }
-      specify { expect(dummy.errors.messages).to eq(foreign_key: [I18n.t("errors.messages.inclusion")]) }
+      context "without on_delete" do
+        let!(:result) { dummy.update_attributes(foreign_key: -1) }
+        specify { expect(result).to be false }
+        specify { expect(dummy.errors.messages).to eq(foreign_key: [I18n.t("errors.messages.inclusion")]) }
+      end
+
+      context "with on_delete" do
+        let!(:result) { dummy.update_attributes(foreign_key_on_delete: -1) }
+        specify { expect(result).to be false }
+        specify { expect(dummy.errors.messages).to eq(foreign_key_on_delete: [I18n.t("errors.messages.inclusion")]) }
+      end
     end
   end
 

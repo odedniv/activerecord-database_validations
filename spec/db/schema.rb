@@ -13,6 +13,7 @@ ActiveRecord::Schema.define do
     t.string  "unique_multiple_string2",  limit: 255
 
     t.integer "foreign_key",              limit: 4
+    t.integer "foreign_key_on_delete",    limit: 4
 
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
@@ -24,4 +25,5 @@ ActiveRecord::Schema.define do
   add_index "dummies", ["unique_multiple_string1", "unique_multiple_string2"], name: "index_dummies_on_unique_multiple_string", unique: true, using: :btree
 
   add_foreign_key "dummies", "dummies", column: "foreign_key"
+  add_foreign_key "dummies", "dummies", column: "foreign_key_on_delete", on_delete: :nullify # 2 words SET NULL
 end
