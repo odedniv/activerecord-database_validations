@@ -44,7 +44,7 @@ describe ActiveRecord::DatabaseValidations::Validations do
 
       context "single" do
         context "integer" do
-          before { older_dummy.update_attributes!(unique_single_integer: 1) }
+          before { older_dummy.update!(unique_single_integer: 1) }
           before { dummy.assign_attributes(unique_single_integer: 1) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be false }
@@ -52,7 +52,7 @@ describe ActiveRecord::DatabaseValidations::Validations do
         end
 
         context "string" do
-          before { older_dummy.update_attributes!(unique_single_string: 1) }
+          before { older_dummy.update!(unique_single_string: 1) }
           before { dummy.assign_attributes(unique_single_string: 1) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be false }
@@ -62,7 +62,7 @@ describe ActiveRecord::DatabaseValidations::Validations do
 
       context "multiple" do
         context "integer" do
-          before { older_dummy.update_attributes!(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
+          before { older_dummy.update!(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
           before { dummy.assign_attributes(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be false }
@@ -70,7 +70,7 @@ describe ActiveRecord::DatabaseValidations::Validations do
         end
 
         context "string" do
-          before { older_dummy.update_attributes!(unique_multiple_string1: 1, unique_multiple_string2: 2) }
+          before { older_dummy.update!(unique_multiple_string1: 1, unique_multiple_string2: 2) }
           before { dummy.assign_attributes(unique_multiple_string1: 1, unique_multiple_string2: 2) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be false }
@@ -78,14 +78,14 @@ describe ActiveRecord::DatabaseValidations::Validations do
         end
 
         context "primary nil" do
-          before { older_dummy.update_attributes!(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
+          before { older_dummy.update!(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
           before { dummy.assign_attributes(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be true }
         end
 
         context "secondary nil" do
-          before { older_dummy.update_attributes!(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
+          before { older_dummy.update!(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
           before { dummy.assign_attributes(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
           let!(:result) { dummy.valid? }
           specify { expect(result).to be true }

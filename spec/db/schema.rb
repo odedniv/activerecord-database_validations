@@ -12,8 +12,8 @@ ActiveRecord::Schema.define do
     t.string  "unique_multiple_string1",  limit: 255
     t.string  "unique_multiple_string2",  limit: 255
 
-    t.integer "foreign_key",              limit: 4
-    t.integer "foreign_key_on_delete",    limit: 4
+    t.bigint "foreign_key",              limit: 4
+    t.bigint "foreign_key_on_delete",    limit: 4
 
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false

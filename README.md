@@ -145,6 +145,8 @@ As Postgresql root:
 CREATE USER gemtester;
 CREATE DATABASE activerecord_database_validations_test;
 GRANT ALL PRIVILEGES ON DATABASE activerecord_database_validations_test TO gemtester;
+\c activerecord_database_validations_test postgres
+GRANT ALL ON SCHEMA public TO gemtester;
 ```
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.

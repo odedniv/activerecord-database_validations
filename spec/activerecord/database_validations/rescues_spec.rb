@@ -10,19 +10,19 @@ describe ActiveRecord::DatabaseValidations::Rescues do
   shared_examples_for :rescues do
     describe "#rescue_database_not_null" do
       context "primary key" do
-        let!(:result) { dummy.tap(&:save!).update_attributes(id: nil) } # can't set new primary key to nil
+        let!(:result) { dummy.tap(&:save!).update(id: nil) } # can't set new primary key to nil
         specify { expect(result).to be false }
         specify { expect(dummy.errors.messages).to eq(id: [I18n.t("errors.messages.blank")]) }
       end
 
       context "integer" do
-        let!(:result) { dummy.update_attributes(not_null_integer: nil) }
+        let!(:result) { dummy.update(not_null_integer: nil) }
         specify { expect(result).to be false }
         specify { expect(dummy.errors.messages).to eq(not_null_integer: [I18n.t("errors.messages.blank")]) }
       end
 
       context "string" do
-        let!(:result) { dummy.update_attributes(not_null_string: nil) }
+        let!(:result) { dummy.update(not_null_string: nil) }
         specify { expect(result).to be false }
         specify { expect(dummy.errors.messages).to eq(not_null_string: [I18n.t("errors.messages.blank")]) }
       end
@@ -30,22 +30,22 @@ describe ActiveRecord::DatabaseValidations::Rescues do
 
     describe "#rescue_database_unique" do
       context "primary key" do
-        let!(:result) { dummy.update_attributes(id: older_dummy.tap(&:save!).id) }
+        let!(:result) { dummy.update(id: older_dummy.tap(&:save!).id) }
         specify { expect(result).to be false }
         specify { expect(dummy.errors.messages).to eq(id: [I18n.t("errors.messages.taken")]) }
       end
 
       context "single" do
         context "integer" do
-          before { older_dummy.update_attributes!(unique_single_integer: 1) }
-          let!(:result) { dummy.update_attributes(unique_single_integer: 1) }
+          before { older_dummy.update!(unique_single_integer: 1) }
+          let!(:result) { dummy.update(unique_single_integer: 1) }
           specify { expect(result).to be false }
           specify { expect(dummy.errors.messages).to eq(unique_single_integer: [I18n.t("errors.messages.taken")]) }
         end
 
         context "string" do
-          before { older_dummy.update_attributes!(unique_single_string: 1) }
-          let!(:result) { dummy.update_attributes(unique_single_string: 1) }
+          before { older_dummy.update!(unique_single_string: 1) }
+          let!(:result) { dummy.update(unique_single_string: 1) }
           specify { expect(result).to be false }
           specify { expect(dummy.errors.messages).to eq(unique_single_string: [I18n.t("errors.messages.taken")]) }
         end
@@ -53,30 +53,30 @@ describe ActiveRecord::DatabaseValidations::Rescues do
 
       context "multiple" do
         context "integer" do
-          before { older_dummy.update_attributes!(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
-          let!(:result) { dummy.update_attributes(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
+          before { older_dummy.update!(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
+          let!(:result) { dummy.update(unique_multiple_integer1: 1, unique_multiple_integer2: 2) }
           specify { expect(result).to be false }
           specify { expect(dummy.errors.messages).to eq(unique_multiple_integer2: [I18n.t("errors.messages.taken")]) }
         end
 
         context "string" do
-          before { older_dummy.update_attributes!(unique_multiple_string1: 1, unique_multiple_string2: 2) }
-          let!(:result) { dummy.update_attributes(unique_multiple_string1: 1, unique_multiple_string2: 2) }
+          before { older_dummy.update!(unique_multiple_string1: 1, unique_multiple_string2: 2) }
+          let!(:result) { dummy.update(unique_multiple_string1: 1, unique_multiple_string2: 2) }
           specify { expect(result).to be false }
           specify { expect(dummy.errors.messages).to eq(unique_multiple_string2: [I18n.t("errors.messages.taken")]) }
         end
 
         # mostly to check how the databases handle it
         context "primary nil" do
-          before { older_dummy.update_attributes!(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
-          let!(:result) { dummy.update_attributes(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
+          before { older_dummy.update!(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
+          let!(:result) { dummy.update(unique_multiple_integer1: nil, unique_multiple_integer2: 2) }
           specify { expect(result).to be true }
         end
 
         # mostly to check how the databases handle it
         context "secondary nil" do
-          before { older_dummy.update_attributes!(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
-          let!(:result) { dummy.update_attributes(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
+          before { older_dummy.update!(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
+          let!(:result) { dummy.update(unique_multiple_integer1: 1, unique_multiple_integer2: nil) }
           specify { expect(result).to be true }
         end
       end
@@ -84,13 +84,13 @@ describe ActiveRecord::DatabaseValidations::Rescues do
 
     describe "#rescue_database_foreign_key" do
       context "without on_delete" do
-        let!(:result) { dummy.update_attributes(foreign_key: -1) }
+        let!(:result) { dummy.update(foreign_key: -1) }
         specify { expect(result).to be false }
         specify { expect(dummy.errors.messages).to eq(foreign_key: [I18n.t("errors.messages.inclusion")]) }
       end
 
       context "with on_delete" do
-        let!(:result) { dummy.update_attributes(foreign_key_on_delete: -1) }
+        let!(:result) { dummy.update(foreign_key_on_delete: -1) }
         specify { expect(result).to be false }
         specify { expect(dummy.errors.messages).to eq(foreign_key_on_delete: [I18n.t("errors.messages.inclusion")]) }
       end
